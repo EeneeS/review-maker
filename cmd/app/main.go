@@ -95,9 +95,9 @@ func (cp *CommitPicker) handleInput(key byte) inputAction {
 	switch key {
 	case 'q':
 		return actionQuit
-	case 'B': // Down arrow
+	case 'B', 'j': // Down arrow || j
 		cp.moveDown()
-	case 'A': // Up arrow
+	case 'A', 'k': // Up arrow || k
 		cp.moveUp()
 	case ' ': // Space to toggle selection
 		cp.toggleSelection()
@@ -198,7 +198,7 @@ func paginate(items []Commit, page int, pageSize int) []Commit {
 type CommitRepository struct{}
 
 func (cr *CommitRepository) GetCommits() ([]Commit, error) {
-	out, err := exec.Command("git", "log", "--pretty=format:%h\t%s").Output()
+	out, err := exec.Command("git", "log", "-n 50", "--pretty=format:%h\t%s").Output()
 	if err != nil {
 		return nil, err
 	}
