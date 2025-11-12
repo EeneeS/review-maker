@@ -3,5 +3,6 @@
 ## TODO
 - Make some settings configurable by the user
   - `pageSize`
+  - total commits get from the repo
   - Additional settings as needed
 - ~~Only show '...more...' indicator when there are additional items to display~~
