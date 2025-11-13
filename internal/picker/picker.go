@@ -26,7 +26,7 @@ func New(commits []models.Commit, pageSize int) *Picker {
 	}
 }
 
-func (p *Picker) Run() (map[string]bool, error) {
+func (p *Picker) Run() ([]string, error) {
 	if err := p.setupTerminal(); err != nil {
 		return nil, err
 	}
@@ -51,7 +51,7 @@ func (p *Picker) restoreTerminal() {
 	}
 }
 
-func (p *Picker) eventLoop() (map[string]bool, error) {
+func (p *Picker) eventLoop() ([]string, error) {
 	buf := make([]byte, 1)
 
 	for {
@@ -70,9 +70,17 @@ func (p *Picker) eventLoop() (map[string]bool, error) {
 			return nil, nil
 		}
 		if action == actionConfirm {
-			return p.selectedMap, nil
+			return p.hashesFromSelected(), nil
 		}
 	}
+}
+
+func (p *Picker) hashesFromSelected() []string {
+	keys := make([]string, 0, len(p.selectedMap))
+	for _, k := range p.commits {
+		keys = append(keys, k.Hash)
+	}
+	return keys
 }
 
 func (p *Picker) toggleSelection() {
