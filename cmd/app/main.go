@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	repo := repository.New()
+	repo := repository.NewMock()
 	commits, err := repo.GetCommits()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error fetching commits: %v\n", err)

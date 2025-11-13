@@ -1,45 +1,10 @@
 package repository
 
-import (
-	"os/exec"
-	"strings"
+import "github.com/EeneeS/review-maker/internal/models"
 
-	"github.com/EeneeS/review-maker/internal/models"
-)
+type MockRepository struct {}
 
-// Repository handles git operations
-type Repository struct{}
-
-func New() *Repository {
-	return &Repository{}
-}
-
-func (r *Repository) GetCommits() ([]models.Commit, error) {
-	out, err := exec.Command("git", "log", "-n 50", "--pretty=format:%h\t%s").Output()
-	if err != nil {
-		return nil, err
-	}
-
-	lines := strings.Split(string(out), "\n")
-	commits := make([]models.Commit, 0, len(lines))
-
-	for _, line := range lines {
-		if line == "" {
-			continue
-		}
-		parts := strings.SplitN(line, "\t", 2)
-		if len(parts) == 2 {
-			commits = append(commits, models.Commit{
-				Hash:    parts[0],
-				Subject: parts[1],
-			})
-		}
-	}
-
-	return commits, nil
-}
-
-func (r *Repository) GetMockCommits() []models.Commit {
+func (r *MockRepository) GetCommits() ([]models.Commit, error) {
 	return []models.Commit{
 		{Hash: "a1b2c3d", Subject: "1"},
 		{Hash: "e4f5g6h", Subject: "2"},
@@ -65,6 +30,7 @@ func (r *Repository) GetMockCommits() []models.Commit {
 		{Hash: "g4h5i6j", Subject: "22"},
 		{Hash: "k7l8m9n", Subject: "23"},
 		{Hash: "o0p1q2r", Subject: "24"},
-	}
+	}, nil
 }
+
 
