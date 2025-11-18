@@ -37,13 +37,24 @@ func New(hashes []string) (*engine, error) {
 	}, nil
 }
 
-func (e *engine) Process() error {
+func (e *engine) ProcessReview() error {
 	tb, err := getTargetBranch()
 	if err != nil {
-		return err
+		return fmt.Errorf("failed to get target branch: %w", err)
+	}
+	e.targetBranch = tb
+
+	// Create the targetBranch from the baseBranch.
+	cmd := exec.Command("git", "branch", e.targetBranch, e.baseBranch)
+	if err := cmd.Run(); err != nil {
+		return fmt.Errorf("failed to create branch %s from %s: %w", tb, e.baseBranch, err)
 	}
 
-	fmt.Println(tb)
+	// Should stash (if any) changes on the current branch before going to the targetBranch
+	// Will pop them after the process is done ...
+
+	// Command(s) to cherry pick the commits in the correct order ...
+	// git cherry-pick $(git rev-list --reverse [selectedHashes])
 
 	return nil
 }

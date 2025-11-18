@@ -30,7 +30,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	e.Process()
+	e.ProcessReview()
 
 	// this is to make sure that the commits will be cherry picked in the correct order
 	// git cherry-pick $(git rev-list --reverse [selectedHashes])
